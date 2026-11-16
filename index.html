@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark" data-accent="violet">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PixelKit — تبدیل HEIC و فشرده‌سازی تصویر، کاملاً در مرورگر</title>
+<meta name="description" content="تبدیل HEIC به JPG/PNG/WebP، فشرده‌سازی، تغییر اندازه، چرخش، فیلتر و واترمارک — همه در مرورگر. بدون آپلود، بدون سرور، بدون حساب کاربری.">
+<meta name="keywords" content="تبدیل heic, heic به jpg, فشرده سازی تصویر, کم حجم کردن عکس, تبدیل عکس آنلاین, واترمارک عکس, تغییر اندازه عکس, image compressor, heic converter, webp converter">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<meta name="author" content="PixelKit">
+<meta name="theme-color" content="#0A0A12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F7F5FF" media="(prefers-color-scheme: light)">
+
+<link rel="canonical" href="https://pouryaaryanpour.github.io/pixelkit/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PixelKit">
+<meta property="og:locale" content="fa_IR">
+<meta property="og:title" content="PixelKit — تبدیل HEIC و فشرده‌سازی تصویر در مرورگر">
+<meta property="og:description" content="همه‌چیز سمت مرورگر: تبدیل، فشرده‌سازی، تغییر اندازه، چرخش، فیلتر و واترمارک. بدون آپلود.">
+<meta property="og:url" content="https://pouryaaryanpour.github.io/pixelkit/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PixelKit — تبدیل HEIC و فشرده‌سازی تصویر در مرورگر">
+<meta name="twitter:description" content="همه‌چیز سمت مرورگر. بدون آپلود، بدون سرور، بدون حساب کاربری.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D28D9'/%3E%3Cstop offset='.5' stop-color='%23A855F7'/%3E%3Cstop offset='1' stop-color='%23EC4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Cpath d='M26 70l16-17 11 11 9-8 15 14' stroke='%23fff' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='37' cy='37' r='8.5' fill='%23FDE68A'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%236D28D9'/%3E%3Cpath d='M26 70l16-17 11 11 9-8 15 14' stroke='%23fff' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "PixelKit",
+  "url": "https://pouryaaryanpour.github.io/pixelkit/",
+  "applicationCategory": "MultimediaApplication",
+  "applicationSubCategory": "Image Converter",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "inLanguage": "fa-IR",
+  "description": "تبدیل HEIC/HEIF و فشرده‌سازی تصاویر با پردازش کاملاً سمت مرورگر؛ شامل تغییر اندازه، چرخش، فیلتر و واترمارک.",
+  "softwareVersion": "1.0.0",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "featureList": [
+    "تبدیل HEIC/HEIF به JPG، PNG و WebP",
+    "فشرده‌سازی JPG، PNG، WebP، AVIF و GIF",
+    "تغییر اندازه با پیش‌تنظیم شبکه‌های اجتماعی",
+    "چرخش، برگرداندن، برش مرکزی و تغییر نسبت",
+    "فیلتر رنگ، محو‌شدگی و شارپ",
+    "واترمارک متنی با موقعیت و شفافیت دلخواه",
+    "استخراج پالت رنگ غالب از تصویر",
+    "مقایسه قبل و بعد با دسته کشیدنی",
+    "خروجی ZIP برای پردازش دسته‌ای",
+    "۱۰۰٪ خصوصی — بدون آپلود"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "آیا فایل‌های من روی سرور آپلود می‌شوند؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "نه. تمام پردازش — رمزگشایی HEIC، تغییر اندازه، فیلتر، واترمارک و کدگذاری — داخل مرورگر شما انجام می‌شود. هیچ درخواست خروجی وجود ندارد و حتی فونت و اسکریپت هم از CDN بارگذاری نمی‌شوند." } },
+    { "@type": "Question", "name": "HEIC را چگونه به JPG تبدیل کنم؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "فایل‌های heic یا heif را در کادر ابزار رها کنید، فرمت خروجی را روی JPG بگذارید و دکمه پردازش را بزنید. نتیجه را می‌توانید جداگانه یا به‌صورت ZIP دانلود کنید." } },
+    { "@type": "Question", "name": "چقدر می‌توان حجم عکس را کم کرد؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "روی عکس‌های معمولی آیفون، تبدیل به JPG با کیفیت ۷۵ تا ۸۰ به‌همراه محدود کردن حداکثر عرض، حجم فایل را بین ۶۰ تا ۹۰ درصد کاهش می‌دهد بدون تفاوت محسوس. خروجی WebP معمولاً از هر دو فرمت دیگر کوچک‌تر است." } },
+    { "@type": "Question", "name": "آیا اطلاعات مکان‌نمایی عکس حذف می‌شود؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "بله. خروجی از نو کدگذاری می‌شود و هیچ داده EXIF یا GPS منتقل نمی‌شود؛ موقعیت مکانی و اطلاعات دوربین در فایل نهایی باقی نمی‌مانند." } },
+    { "@type": "Question", "name": "آیا می‌توانم چند فایل را هم‌زمان پردازش کنم؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "بله، حداکثر ۵۰ فایل در هر نوبت. هر فایل نتیجه و میزان کاهش حجم خودش را نشان می‌دهد و می‌توانید همه را به‌صورت یک فایل ZIP دریافت کنید." } },
+    { "@type": "Question", "name": "آیا ابزار رایگان است؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "بله. بدون حساب کاربری، بدون واترمارک، بدون محدودیت حجم و بدون نسخه پولی. کاملاً ایستا و رایگان اجرا می‌شود." } }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- ======================= آیکون‌ها (SVG Sprite) ======================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-base" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"></g>
+  </defs>
+  <symbol id="i-upload" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M3 16v2a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2"/></g></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12"/><path d="m7 11 5 5 5-5"/><path d="M3 16v2a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3v-2"/></g></symbol>
+  <symbol id="i-wand" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m15 4 5 5L9 20l-5-5L15 4Z"/><path d="M14 5 19 10"/><path d="M6 3v3"/><path d="M4.5 4.5h3"/><path d="M19 15v3"/><path d="M17.5 16.5h3"/></g></symbol>
+  <symbol id="i-compress" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10 21 3"/><path d="M3 21 10 14"/></g></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21.3 8.7 8.7 21.3a1 1 0 0 1-1.4 0l-4.6-4.6a1 1 0 0 1 0-1.4L15.3 2.7a1 1 0 0 1 1.4 0l4.6 4.6a1 1 0 0 1 0 1.4Z"/><path d="m7.5 10.5 2 2"/><path d="m10.5 7.5 2 2"/><path d="m13.5 4.5 2 2"/></g></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9"/><path d="M17 7h3"/><path d="M4 17h3"/><path d="M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></g></symbol>
+  <symbol id="i-stamp" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3"/><path d="M12 4v16"/><path d="M9 20h6"/></g></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M5 6v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6"/><path d="M10 11v6"/><path d="M14 11v6"/></g></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></g></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></g></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></g></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5"/></g></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5"/><path d="M12 16.2v.2"/></g></symbol>
+  <symbol id="i-zip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M10 13h4"/><path d="M12 13v2"/></g></symbol>
+  <symbol id="i-rotate-cw" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></g></symbol>
+  <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></g></symbol>
+  <symbol id="i-flip-h" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="m16 7 4 5-4 5V7Z"/><path d="M8 7 4 12l4 5V7Z"/></g></symbol>
+  <symbol id="i-flip-v" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="m7 16 5 4 5-4H7Z"/><path d="m7 8 5-4 5 4H7Z"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></g></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></g></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9c0 1.7-1.3 3-3 3h-1.5a2.5 2.5 0 0 0-1.8 4.2A1.8 1.8 0 0 1 12 21Z"/><circle cx="7.5" cy="12" r="1.3"/><circle cx="10" cy="8" r="1.3"/><circle cx="14.5" cy="7.5" r="1.3"/></g></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></g></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></g></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></g></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="1.8"/><path d="m21 15-4.5-4.5L5 21"/></g></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8v.2"/></g></symbol>
+  <symbol id="i-crop" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></g></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="M18.5 16.5 19.2 19l2.5.7-2.5.7-.7 2.5-.7-2.5-2.5-.7 2.5-.7.7-2.5Z"/></g></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></g></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></g></symbol>
+  <symbol id="i-layers-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/><path d="m3 3 18 18"/></g></symbol>
+  <symbol id="i-mobile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18.5h2"/></g></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></g></symbol>
+  <symbol id="i-bolt-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/><path d="m2 2 20 20"/></g></symbol>
+</svg>
+
+<!-- ======================= پس‌زمینه گرادیانی ======================= -->
+<div class="aurora" aria-hidden="true">
+  <span class="blob b1"></span>
+  <span class="blob b2"></span>
+  <span class="blob b3"></span>
+  <span class="grain"></span>
+</div>
+
+<a class="skip" href="#studio">پرش به ابزار</a>
+
+<!-- ======================= نوار بالا ======================= -->
+<header class="topbar">
+  <div class="topbar-inner glass">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 100 100" width="30" height="30">
+          <defs><linearGradient id="bm" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--acc-1)"/><stop offset=".55" stop-color="var(--acc-2)"/><stop offset="1" stop-color="var(--acc-3)"/>
+          </linearGradient></defs>
+          <rect width="100" height="100" rx="26" fill="url(#bm)"/>
+          <path d="M26 70l16-17 11 11 9-8 15 14" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="37" cy="37" r="8.5" fill="#FDE68A"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <b>PixelKit</b>
+        <small>استودیوی تصویر در مرورگر</small>
+      </span>
+    </a>
+
+    <nav class="mainnav" id="mainnav" aria-label="ناوبری اصلی">
+      <a href="#studio">ابزار</a>
+      <a href="#features">امکانات</a>
+      <a href="#privacy">حریم خصوصی</a>
+      <a href="#faq">سؤالات</a>
+    </nav>
+
+    <div class="topbar-actions">
+      <div class="accent-picker" role="group" aria-label="انتخاب رنگ برند">
+        <button class="icon-btn accent-btn" id="accentBtn" type="button" aria-label="تغییر رنگ برند" aria-expanded="false">
+          <svg width="18" height="18" aria-hidden="true"><use href="#i-palette"/></svg>
+        </button>
+        <div class="accent-menu" id="accentMenu" hidden>
+          <p class="accent-menu-title">رنگ برند</p>
+          <div class="accent-swatches" id="accentSwatches"></div>
+        </div>
+      </div>
+
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="تغییر حالت روشن و تاریک" title="روشن / تاریک">
+        <svg class="ico-sun" width="19" height="19" aria-hidden="true"><use href="#i-sun"/></svg>
+        <svg class="ico-moon" width="19" height="19" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
+
+      <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="باز کردن منو" aria-expanded="false" aria-controls="mainnav">
+        <svg class="ico-menu" width="20" height="20" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="ico-close" width="20" height="20" aria-hidden="true"><use href="#i-x"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ======================= هیرو ======================= -->
+  <section class="hero wrap">
+    <p class="eyebrow"><svg width="15" height="15" aria-hidden="true"><use href="#i-bolt-off"/></svg> ۱۰۰٪ داخل مرورگر — بدون یک بایت آپلود</p>
+    <h1>تصویرت را <span class="grad-text">حرفه‌ای</span> کن.<br>همین حالا، همین‌جا.</h1>
+    <p class="lead">
+      تبدیل <b>HEIC</b> به JPG، فشرده‌سازی تا <b>۹۰٪</b>، تغییر اندازه، چرخش، فیلتر رنگ و واترمارک —
+      همه در مرورگر شما، بدون سرور، بدون حساب کاربری، بدون واترمارک.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary btn-lg" href="#studio">
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-upload"/></svg>
+        شروع کنید
+      </a>
+      <a class="btn btn-ghost btn-lg" href="#features">
+        <svg width="18" height="18" aria-hidden="true"><use href="#i-sparkle"/></svg>
+        چه کارهایی می‌کند؟
+      </a>
+    </div>
+    <ul class="hero-badges">
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-lock"/></svg> بدون آپلود</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-shield"/></svg> حذف خودکار EXIF و GPS</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-zap"/></svg> پردازش دسته‌ای تا ۵۰ فایل</li>
+      <li><svg width="15" height="15" aria-hidden="true"><use href="#i-zip"/></svg> خروجی ZIP</li>
+    </ul>
+  </section>
+
+  <!-- ======================= ابزار ======================= -->
+  <section class="studio wrap" id="studio">
+    <div class="studio-card glass">
+
+      <!-- تب‌ها -->
+      <div class="tabs" role="tablist" aria-label="تنظیمات پردازش">
+        <button class="tab is-active" role="tab" id="tab-convert" aria-selected="true" aria-controls="panel-convert" data-tab="convert">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-wand"/></svg><span>تبدیل</span>
+        </button>
+        <button class="tab" role="tab" id="tab-compress" aria-selected="false" aria-controls="panel-compress" data-tab="compress" tabindex="-1">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-compress"/></svg><span>فشرده‌سازی</span>
+        </button>
+        <button class="tab" role="tab" id="tab-size" aria-selected="false" aria-controls="panel-size" data-tab="size" tabindex="-1">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-ruler"/></svg><span>اندازه</span>
+        </button>
+        <button class="tab" role="tab" id="tab-edit" aria-selected="false" aria-controls="panel-edit" data-tab="edit" tabindex="-1">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-sliders"/></svg><span>ویرایش</span>
+        </button>
+        <button class="tab" role="tab" id="tab-mark" aria-selected="false" aria-controls="panel-mark" data-tab="mark" tabindex="-1">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-stamp"/></svg><span>واترمارک</span>
+        </button>
+      </div>
+
+      <!-- ناحیه رها کردن -->
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="انتخاب یا رها کردن فایل‌های تصویری">
+        <div class="drop-art" aria-hidden="true">
+          <svg viewBox="0 0 140 120" width="108" height="92">
+            <defs>
+              <linearGradient id="da" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="var(--acc-2)"/><stop offset="1" stop-color="var(--acc-3)"/>
+              </linearGradient>
+            </defs>
+            <rect x="14" y="24" width="80" height="60" rx="12" fill="none" stroke="url(#da)" stroke-width="3.2"/>
+            <circle cx="40" cy="44" r="8" fill="var(--acc-3)"/>
+            <path d="M18 72l22-22 14 14 13-11 21 19" fill="none" stroke="url(#da)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M104 30v30m0 0-11-11m11 11 11-11" fill="none" stroke="var(--acc-3)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M100 74v18m0 0-8-8m8 8 8-8" fill="none" stroke="var(--acc-2)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h2>فایل‌ها را اینجا رها کنید</h2>
+        <p>HEIC · HEIF · JPG · PNG · WebP · AVIF · GIF — تا <b>۵۰ فایل</b> هم‌زمان</p>
+        <span class="drop-hint">کلیک کنید یا <kbd>Ctrl</kbd>+<kbd>V</kbd> را بزنید</span>
+        <input type="file" id="file" accept="image/*,.heic,.heif,.hif" multiple>
+      </div>
+
+      <!-- پنل‌ها -->
+      <div class="panels">
+
+        <!-- تبدیل -->
+        <div class="panel is-active" id="panel-convert" role="tabpanel" aria-labelledby="tab-convert" data-panel="convert">
+          <div class="grid-3">
+            <div class="field">
+              <label for="format">فرمت خروجی</label>
+              <select id="format">
+                <option value="auto">خودکار — سبک‌ترین نتیجه</option>
+                <option value="image/jpeg">JPG — سازگاری کامل</option>
+                <option value="image/webp">WebP — کوچک‌ترین حجم</option>
+                <option value="image/png">PNG — بدون افت کیفیت</option>
+              </select>
+              <p class="hint" id="fmtHint"></p>
+            </div>
+
+            <div class="field">
+              <label for="quality">کیفیت <output class="val" id="qv" for="quality">۸۰</output></label>
+              <input type="range" id="quality" min="10" max="100" value="80" step="1">
+              <p class="hint" id="qHint"></p>
+            </div>
+
+            <div class="field">
+              <label>پس‌زمینه شفافیت</label>
+              <div class="swatch-row" id="bgSwatches" role="radiogroup" aria-label="رنگ پس‌زمینه"></div>
+              <p class="hint">JPG شفافیت ندارد؛ بخش‌های شفاف با این رنگ پر می‌شوند.</p>
+            </div>
+          </div>
+
+          <label class="switch">
+            <input type="checkbox" id="smartFormat">
+            <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            <span class="switch-body">
+              <b>انتخاب هوشمند فرمت</b>
+              <small>برای هر فایل سبک‌ترین خروجی بین WebP و JPG انتخاب می‌شود</small>
+            </span>
+          </label>
+        </div>
+
+        <!-- فشرده‌سازی -->
+        <div class="panel" id="panel-compress" role="tabpanel" aria-labelledby="tab-compress" data-panel="compress" hidden>
+          <div class="grid-3">
+            <div class="field">
+              <label for="cQuality">کیفیت <output class="val" id="cqv" for="cQuality">۷۵</output></label>
+              <input type="range" id="cQuality" min="10" max="100" value="75" step="1">
+              <p class="hint" id="cqHint"></p>
+            </div>
+            <div class="field">
+              <label for="cMaxW">حداکثر عرض <output class="val" id="cwv" for="cMaxW">۱۶۰۰</output><span class="unit">px</span></label>
+              <input type="range" id="cMaxW" min="320" max="6000" value="1600" step="80">
+              <p class="hint">اندازه‌های کوچک‌تر دست‌نخورده می‌مانند.</p>
+            </div>
+            <div class="field">
+              <label for="cFormat">فرمت خروجی</label>
+              <select id="cFormat">
+                <option value="auto">خودکار — سبک‌ترین نتیجه</option>
+                <option value="image/webp">WebP</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/png">PNG</option>
+              </select>
+              <p class="hint">حالت خودکار بین WebP و JPG مقایسه می‌کند و کوچک‌تر را نگه می‌دارد.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- اندازه -->
+        <div class="panel" id="panel-size" role="tabpanel" aria-labelledby="tab-size" data-panel="size" hidden>
+          <div class="field">
+            <label>پیش‌تنظیم‌های آماده</label>
+            <div class="chips" id="sizePresets" role="group" aria-label="اندازه‌های آماده"></div>
+          </div>
+          <div class="grid-3 mt">
+            <div class="field">
+              <label for="outW">عرض <span class="unit">px</span></label>
+              <input type="number" id="outW" min="16" max="12000" step="1" placeholder="خودکار" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="outH">ارتفاع <span class="unit">px</span></label>
+              <input type="number" id="outH" min="16" max="12000" step="1" placeholder="خودکار" inputmode="numeric">
+            </div>
+            <div class="field">
+              <label for="fitMode">نحوه تطبیق</label>
+              <select id="fitMode">
+                <option value="cover">پر کردن و برش مرکزی</option>
+                <option value="contain">جا دادن کامل با حاشیه</option>
+                <option value="stretch">کشیدن بدون تغییر نسبت</option>
+                <option value="max">فقط محدودسازی (بدون تغییر نسبت)</option>
+              </select>
+              <p class="hint">اگر عرض یا ارتفاع خالی باشد، آن بعد دست‌نخورده می‌ماند.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ویرایش -->
+        <div class="panel" id="panel-edit" role="tabpanel" aria-labelledby="tab-edit" data-panel="edit" hidden>
+          <div class="grid-2">
+            <div class="field">
+              <label>چرخش و برگرداندن</label>
+              <div class="icon-row">
+                <button class="icon-btn lg" type="button" data-rotate="-90" aria-label="چرخش ۹۰ درجه به چپ"><svg width="19" height="19" aria-hidden="true"><use href="#i-rotate-ccw"/></svg></button>
+                <button class="icon-btn lg" type="button" data-rotate="90" aria-label="چرخش ۹۰ درجه به راست"><svg width="19" height="19" aria-hidden="true"><use href="#i-rotate-cw"/></svg></button>
+                <button class="icon-btn lg" type="button" data-flip="h" aria-label="برگرداندن افقی"><svg width="19" height="19" aria-hidden="true"><use href="#i-flip-h"/></svg></button>
+                <button class="icon-btn lg" type="button" data-flip="v" aria-label="برگرداندن عمودی"><svg width="19" height="19" aria-hidden="true"><use href="#i-flip-v"/></svg></button>
+                <button class="icon-btn lg" type="button" id="resetEdit" aria-label="بازنشانی ویرایش‌ها"><svg width="19" height="19" aria-hidden="true"><use href="#i-refresh"/></svg></button>
+              </div>
+              <p class="hint">چرخش‌های ۹۰ درجه‌ای و برگرداندن، بدون افت کیفیت انجام می‌شود.</p>
+            </div>
+            <div class="field">
+              <label for="sharpen">شارپ <output class="val" id="shv" for="sharpen">۰</output></label>
+              <input type="range" id="sharpen" min="0" max="100" value="0" step="1">
+              <p class="hint">افزایش وضوح لبه‌ها پس از کوچک‌سازی.</p>
+            </div>
+          </div>
+          <div class="grid-3 mt" id="filterGrid">
+            <div class="field">
+              <label for="brightness">روشنایی <output class="val" id="brv" for="brightness">۱۰۰</output></label>
+              <input type="range" id="brightness" min="0" max="200" value="100" step="1">
+            </div>
+            <div class="field">
+              <label for="contrast">کنتراست <output class="val" id="cov" for="contrast">۱۰۰</output></label>
+              <input type="range" id="contrast" min="0" max="200" value="100" step="1">
+            </div>
+            <div class="field">
+              <label for="saturate">اشباع رنگ <output class="val" id="sav" for="saturate">۱۰۰</output></label>
+              <input type="range" id="saturate" min="0" max="200" value="100" step="1">
+            </div>
+            <div class="field">
+              <label for="blur">محو‌شدگی <output class="val" id="blv" for="blur">۰</output></label>
+              <input type="range" id="blur" min="0" max="20" value="0" step="0.5">
+            </div>
+            <div class="field">
+              <label for="hue">تغییر فام <output class="val" id="huv" for="hue">۰</output><span class="unit">°</span></label>
+              <input type="range" id="hue" min="-180" max="180" value="0" step="5">
+            </div>
+            <div class="field">
+              <label>حالت رنگی</label>
+              <div class="chips" id="toneChips" role="group" aria-label="حالت رنگی"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- واترمارک -->
+        <div class="panel" id="panel-mark" role="tabpanel" aria-labelledby="tab-mark" data-panel="mark" hidden>
+          <div class="grid-3">
+            <div class="field">
+              <label for="wmText">متن واترمارک</label>
+              <input type="text" id="wmText" placeholder="مثلاً نام برند یا سایت" maxlength="60" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="wmSize">اندازه <output class="val" id="wmSizeV" for="wmSize">۴</output><span class="unit">٪ عرض</span></label>
+              <input type="range" id="wmSize" min="1" max="20" value="4" step="0.5">
+            </div>
+            <div class="field">
+              <label for="wmOpacity">شفافیت <output class="val" id="wmOpacityV" for="wmOpacity">۶۰</output><span class="unit">٪</span></label>
+              <input type="range" id="wmOpacity" min="5" max="100" value="60" step="1">
+            </div>
+          </div>
+          <div class="grid-2 mt">
+            <div class="field">
+              <label>رنگ متن</label>
+              <div class="swatch-row" id="wmSwatches" role="radiogroup" aria-label="رنگ متن واترمارک"></div>
+            </div>
+            <div class="field">
+              <label>موقعیت</label>
+              <div class="pos-grid" id="wmPos" role="radiogroup" aria-label="موقعیت واترمارک"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- نوار عملیات -->
+      <div class="actionbar">
+        <div class="actionbar-left">
+          <button class="btn btn-primary" id="convert" disabled>
+            <svg width="18" height="18" aria-hidden="true"><use href="#i-sparkle"/></svg>
+            پردازش
+          </button>
+          <button class="btn btn-accent" id="dlZip" disabled>
+            <svg width="18" height="18" aria-hidden="true"><use href="#i-zip"/></svg>
+            دانلود ZIP
+          </button>
+          <button class="btn btn-ghost" id="clear" disabled>
+            <svg width="18" height="18" aria-hidden="true"><use href="#i-trash"/></svg>
+            پاک کردن
+          </button>
+        </div>
+        <div class="actionbar-right">
+          <label class="inline-field">
+            <span>نام خروجی</span>
+            <input type="text" id="nameTpl" value="{name}.{ext}" maxlength="80" autocomplete="off" spellcheck="false">
+          </label>
+        </div>
+      </div>
+
+      <div class="progress" id="prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+      <p class="alert" id="err" role="alert" hidden></p>
+    </div>
+  </section>
+
+  <!-- ======================= نتایج ======================= -->
+  <section class="results wrap" id="results" hidden>
+    <div class="results-head">
+      <h2>نتایج پردازش</h2>
+      <div class="summary" id="summary"></div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="result-list" id="list"></div>
+  </section>
+
+  <!-- ======================= امکانات ======================= -->
+  <section class="features wrap" id="features">
+    <div class="section-head">
+      <p class="eyebrow"><svg width="15" height="15" aria-hidden="true"><use href="#i-sparkle"/></svg> امکانات</p>
+      <h2>یک جعبه‌ابزار کامل، بدون یک بایت آپلود</h2>
+      <p class="section-lead">همه‌چیز با Canvas API و دو کتابخانه سبک متن‌باز انجام می‌شود. فایل شما از دستگاه خودتان خارج نمی‌شود.</p>
+    </div>
+    <div class="feature-grid" id="featureGrid"></div>
+  </section>
+
+  <!-- ======================= حریم خصوصی ======================= -->
+  <section class="privacy wrap" id="privacy">
+    <div class="privacy-card glass">
+      <div class="privacy-visual" aria-hidden="true">
+        <svg viewBox="0 0 120 120" width="84" height="84">
+          <defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="var(--acc-1)"/><stop offset="1" stop-color="var(--acc-3)"/>
+          </linearGradient></defs>
+          <path d="M60 14 22 28v32c0 24 16 40 38 46 22-6 38-22 38-46V28L60 14Z" fill="none" stroke="url(#pg)" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="m44 60 12 12 22-24" fill="none" stroke="url(#pg)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="privacy-body">
+        <h2>حریم خصوصی، نه شعار</h2>
+        <ul>
+          <li><b>بدون آپلود.</b> فایل با <code>FileReader</code> خوانده و در مرورگر رمزگشایی می‌شود. هیچ درخواست خروجی وجود ندارد — در تب Network مرورگر می‌توانید مطمئن شوید.</li>
+          <li><b>بدون درخواست خارجی.</b> فونت، کتابخانه‌ها و اسکریپت‌ها همگی محلی‌اند؛ حتی فایل‌های تکراری از CDN هم دریافت نمی‌شود.</li>
+          <li><b>EXIF و GPS حذف می‌شود.</b> خروجی از نو کدگذاری می‌شود؛ موقعیت مکانی، مدل دوربین و زمان عکس منتقل نمی‌شوند.</li>
+          <li><b>بدون ذخیره‌سازی.</b> چیزی روی دیسک نوشته نمی‌شود و با بستن تب همه‌چیز پاک می‌شود.</li>
+          <li><b>بدون حساب، تبلیغ و ردیابی.</b> بدون کوکی، بدون فونت‌سنج، بدون آنالیز.</li>
+          <li><b>کار offline.</b> پس از اولین بازدید، ابزار بدون اینترنت هم کار می‌کند.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= سوالات ======================= -->
+  <section class="faq wrap" id="faq">
+    <div class="section-head">
+      <p class="eyebrow"><svg width="15" height="15" aria-hidden="true"><use href="#i-info"/></svg> راهنما</p>
+      <h2>سؤالات پرتکرار</h2>
+    </div>
+    <div class="faq-list">
+      <details open>
+        <summary>آیا فایل‌های من روی سرور آپلود می‌شوند؟</summary>
+        <p><b>نه.</b> تمام پردازش — از رمزگشایی HEIC تا واترمارک و کدگذاری — داخل مرورگر شما انجام می‌شود. ابزار حتی فایل اسکریپت یا فونت خارجی هم بارگذاری نمی‌کند، پس تنها درخواست‌های شبکه، خودِ صفحه هستند.</p>
+      </details>
+      <details>
+        <summary>HEIC را چگونه به JPG تبدیل کنم؟</summary>
+        <p>فایل‌های <code>.heic</code> یا <code>.heif</code> را در کادر ابزار رها کنید، در تب «تبدیل» فرمت خروجی را روی JPG بگذارید، کیفیت را تنظیم کنید و «پردازش» را بزنید.</p>
+      </details>
+      <details>
+        <summary>چقدر می‌توانم حجم عکس‌ها را کم کنم؟</summary>
+        <p>روی عکس‌های معمولی آیفون، تبدیل به JPG با کیفیت ۷۵ تا ۸۰ به‌همراه محدود کردن حداکثر عرض، حجم فایل را <b>۶۰ تا ۹۰ درصد</b> کم می‌کند بدون تفاوت محسوس. اگر کمترین حجم را می‌خواهید، تب «فشرده‌سازی» با فرمت خودکار را انتخاب کنید.</p>
+      </details>
+      <details>
+        <summary>پیش‌تنظیم‌های اندازه برای چه شبکه‌هایی هستند؟</summary>
+        <p>اینستاگرام (مربع، استوری، پست عمودی)، یوتیوب (بنر و تامبنیل)، X، لینکدین، پینترست، تلگرام، واتساپ، اشتراک‌گذاری، Full HD و 4K. کافی است یکی را انتخاب کنید تا عرض و ارتفاع خودکار پر شوند؛ می‌توانید بعداً دستی تغییرشان دهید.</p>
+      </details>
+      <details>
+        <summary>تفاوت حالت‌های «پر کردن»، «جا دادن» و «کشیدن» چیست؟</summary>
+        <p><b>پر کردن و برش</b> تصویر را بدون تغییر نسبت آن‌قدر بزرگ می‌کند تا کادر را پر کند و اضافه‌ها از مرکز بریده می‌شود — مناسب آواتار و پست مربعی. <b>جا دادن</b> کل تصویر را نگه می‌دارد و حاشیه می‌گذارد. <b>کشیدن</b> تصویر را دقیقاً به ابعاد خواسته‌شده می‌کشد. <b>محدودسازی</b> فقط اندازه را کوچک می‌کند بدون برش یا کش.</p>
+      </details>
+      <details>
+        <summary>اطلاعات مکان‌نمایی عکس من چه می‌شود؟</summary>
+        <p>خروجی از نو کدگذاری می‌شود و هیچ داده EXIF منتقل نمی‌شود؛ مختصات GPS، مدل دوربین و زمان عکس در فایل نهایی باقی نمی‌مانند.</p>
+      </details>
+      <details>
+        <summary>آیا می‌توانم چند فایل را هم‌زمان پردازش کنم؟</summary>
+        <p>بله، حداکثر <b>۵۰ فایل</b> در هر نوبت. هر فایل نتیجه، اندازه و میزان کاهش خودش را نشان می‌دهد و می‌توانید همه را جداگانه یا به‌صورت یک <b>ZIP</b> دانلود کنید.</p>
+      </details>
+      <details>
+        <summary>پالت رنگ و پیش‌نمایش قبل/بعد چه کار می‌کنند؟</summary>
+        <p>پالت، رنگ‌های غالب تصویر را استخراج می‌کند تا بتوانید هماهنگ از آن‌ها استفاده کنید. نمای «مقایسه» یک دسته‌کشیدنی بین نسخه اصلی و خروجی است تا دقیقاً ببینید چه چیزی تغییر کرده است.</p>
+      </details>
+      <details>
+        <summary>آیا رایگان است؟</summary>
+        <p>بله. بدون حساب کاربری، بدون واترمارک، بدون محدودیت حجم و بدون نسخه پولی. کاملاً ایستا اجرا می‌شود.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <span class="brand-mark sm" aria-hidden="true">
+        <svg viewBox="0 0 100 100" width="22" height="22">
+          <rect width="100" height="100" rx="26" fill="url(#bm)"/>
+          <path d="M26 70l16-17 11 11 9-8 15 14" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <div>
+        <b>PixelKit</b>
+        <small>استودیوی تصویر در مرورگر</small>
+      </div>
+    </div>
+    <p class="foot-meta">
+      ساخته‌شده برای کسانی که فقط به یک ابزار سریع و بی‌طرفیت نیاز دارند ·
+      بدون سرور، بدون ذخیره‌سازی، بدون ردیابی
+    </p>
+  </div>
+</footer>
+
+<!-- ======================= مودال مقایسه ======================= -->
+<div class="modal" id="compareModal" hidden>
+  <div class="modal-backdrop" data-close></div>
+  <div class="modal-card glass" role="dialog" aria-modal="true" aria-labelledby="compareTitle">
+    <div class="modal-head">
+      <h3 id="compareTitle">مقایسه قبل و بعد</h3>
+      <button class="icon-btn" type="button" data-close aria-label="بستن"><svg width="19" height="19" aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="compare" id="compare">
+      <img class="compare-b" id="cmpAfter" alt="خروجی پردازش‌شده">
+      <img class="compare-a" id="cmpBefore" alt="تصویر اصلی">
+      <div class="compare-bar" id="cmpBar" role="slider" tabindex="0" aria-label="دسته‌کشیدن مقایسه" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <span class="compare-handle" aria-hidden="true"></span>
+      </div>
+      <span class="compare-tag l">اصلی</span>
+      <span class="compare-tag r">خروجی</span>
+    </div>
+    <div class="compare-foot">
+      <div class="palette" id="palette"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/heic2any.min.js"></script>
+<script src="vendor/pica.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

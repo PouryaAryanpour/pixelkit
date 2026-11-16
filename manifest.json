@@ -1,0 +1,27 @@
+{
+  "name": "PixelKit — استودیوی تصویر در مرورگر",
+  "short_name": "PixelKit",
+  "description": "تبدیل HEIC، فشرده‌سازی، تغییر اندازه، فیلتر و واترمارک — ۱۰۰٪ سمت مرورگر.",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#07070E",
+  "theme_color": "#6D28D9",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
