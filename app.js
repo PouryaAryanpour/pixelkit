@@ -58,6 +58,7 @@
 
   var FEATURES = [
     { i: 'i-wand', t: 'تبدیل HEIC و HEIF', d: 'فرمت‌های آیفون و مک را به JPG، PNG یا WebP تبدیل کنید — با رمزگشایی کامل در مرورگر.' },
+    { i: 'i-code', t: 'کد SVG به PNG و SVG', d: 'کد SVG را پیست کنید یا فایل .svg را رها کنید؛ پیش‌نمایش زنده، خروجی PNG با مقیاس دلخواه و نسخه SVG پاک‌سازی‌شده.' },
     { i: 'i-compress', t: 'فشرده‌سازی هوشمند', d: 'کیفیت و ابعاد را تنظیم کنید؛ حالت خودکار سبک‌ترین خروجی بین WebP و JPG را انتخاب می‌کند.' },
     { i: 'i-ruler', t: 'اندازه‌های آماده شبکه‌های اجتماعی', d: 'از اینستاگرام و یوتیوب تا لینکدین و پینترست؛ یک کلیک و ابعاد دقیق.' },
     { i: 'i-crop', t: 'برش، کشیدن و تغییر نسبت', d: 'پر کردن و برش مرکزی، جا دادن با حاشیه یا کشیدن بدون تغییر نسبت.' },
@@ -89,7 +90,12 @@
     cMaxW: $('cMaxW'), outW: $('outW'), outH: $('outH'), fitMode: $('fitMode'),
     smart: $('smartFormat'), nameTpl: $('nameTpl'),
     bgSwatches: $('bgSwatches'), sizePresets: $('sizePresets'), toneChips: $('toneChips'),
-    wmSwatches: $('wmSwatches'), wmPos: $('wmPos'), featureGrid: $('featureGrid')
+    wmSwatches: $('wmSwatches'), wmPos: $('wmPos'), featureGrid: $('featureGrid'),
+    actionbar: $('actionbar'),
+    svgCode: $('svgCode'), svgStage: $('svgStage'), svgMeta: $('svgMeta'), svgBg: $('svgBg'),
+    svgScale: $('svgScale'), svgWidth: $('svgWidth'), svgName: $('svgName'), svgFile: $('svgFile'),
+    svgPick: $('svgPick'), svgSample: $('svgSample'), svgWipe: $('svgWipe'),
+    svgPng: $('svgPng'), svgSave: $('svgSave'), svgCopy: $('svgCopy')
   };
 
   var state = {
@@ -216,6 +222,7 @@
       p.hidden = !on;
       p.classList.toggle('is-active', on);
     });
+    if (el.actionbar) el.actionbar.style.display = name === 'svg' ? 'none' : '';
   }
   tabs.forEach(function (t, i) {
     t.addEventListener('click', function () { selectTab(t.dataset.tab); });
@@ -404,13 +411,19 @@
   }
   function addFiles(list) {
     showErr('');
-    var ok = [], bad = [];
+    var ok = [], bad = [], svgs = [];
     for (var i = 0; i < list.length; i++) {
       var f = list[i];
-      if ((f.type && f.type.indexOf('image/') === 0) || /\.(heic|heif|hif)$/i.test(f.name)) ok.push(f);
+      var isSvg = f.type === 'image/svg+xml' || /\.svg$/i.test(f.name || '');
+      if (isSvg) svgs.push(f);
+      else if ((f.type && f.type.indexOf('image/') === 0) || /\.(heic|heif|hif)$/i.test(f.name)) ok.push(f);
       else bad.push(f.name);
     }
-    if (bad.length) showErr('فایل غیرتصویری نادیده گرفته شد: ' + bad.join('، '));
+    if (svgs.length) {
+      svgLoadFile(svgs[0]);
+      if (svgs.length > 1) toast('هر بار یک فایل SVG پردازش می‌شود');
+    }
+    if (bad.length) showErr('فایل پشتیبانی‌نشده نادیده گرفته شد: ' + bad.join('، '));
     var room = MAX_FILES - state.files.length;
     if (ok.length > room) {
       showErr('حداکثر ' + faNum(MAX_FILES) + ' فایل در هر نوبت.');
@@ -1035,6 +1048,385 @@
       }
     });
   })();
+
+  /* --------------------------------- SVG ---------------------------------- */
+  var SVG_BG = [
+    { v: 'transparent', n: 'شفاف' },
+    { v: '#FFFFFF', n: 'سفید' },
+    { v: '#000000', n: 'مشکی' },
+    { v: '#F2F0FC', n: 'یاسی روشن' },
+    { v: '#07070E', n: 'سرمه‌ای' }
+  ];
+
+  var SAMPLE_SVG = [
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160" width="240" height="160">',
+    '  <defs>',
+    '    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">',
+    '      <stop offset="0" stop-color="#6D28D9"/>',
+    '      <stop offset=".55" stop-color="#A855F7"/>',
+    '      <stop offset="1" stop-color="#EC4899"/>',
+    '    </linearGradient>',
+    '  </defs>',
+    '  <rect width="240" height="160" rx="28" fill="url(#g)"/>',
+    '  <circle cx="80" cy="66" r="18" fill="#FDE68A"/>',
+    '  <path d="M38 126l38-40 24 24 20-18 44 34" fill="none" stroke="#fff"',
+    '        stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>',
+    '</svg>'
+  ].join('\n');
+
+  var svgState = {
+    root: null, clean: '', img: null, url: null,
+    bw: 0, bh: 0, bg: 'transparent', timer: null
+  };
+
+  var SVG_BAD = /^(script|foreignobject|iframe|object|embed|handler|audio|video|canvas|meta|link|base)$/i;
+
+  function svgCleanAttrs(node) {
+    if (!node.attributes) return;
+    for (var i = node.attributes.length - 1; i >= 0; i--) {
+      var a = node.attributes[i];
+      var name = a.name.toLowerCase();
+      var val = a.value || '';
+      if (name.indexOf('on') === 0) { node.removeAttribute(a.name); continue; }
+      if (name === 'href' || name === 'xlink:href' || name === 'src') {
+        if (!/^(#|data:image\/)/i.test(val.trim())) node.removeAttribute(a.name);
+        continue;
+      }
+      if (name === 'style' && /url\(\s*['"]?(https?:|\/\/)/i.test(val)) node.removeAttribute(a.name);
+    }
+  }
+
+  function svgWalk(node) {
+    var kids = Array.prototype.slice.call(node.childNodes);
+    kids.forEach(function (n) {
+      if (n.nodeType === 8) { n.parentNode.removeChild(n); return; }
+      if (n.nodeType !== 1) return;
+      var tag = n.nodeName.toLowerCase();
+      if (SVG_BAD.test(tag)) { n.parentNode.removeChild(n); return; }
+      if (tag === 'style') {
+        n.textContent = n.textContent
+          .replace(/@import[^;]+;?/gi, '')
+          .replace(/url\(\s*['"]?(https?:|\/\/)[^)]*\)/gi, 'none');
+      }
+      if (tag === 'image') {
+        var ih = n.getAttribute('href') || n.getAttribute('xlink:href') || '';
+        if (ih && !/^data:image\//i.test(ih.trim())) { n.parentNode.removeChild(n); return; }
+      }
+      if (tag === 'use') {
+        var uh = (n.getAttribute('href') || n.getAttribute('xlink:href') || '').trim();
+        if (uh && uh.charAt(0) !== '#') { n.parentNode.removeChild(n); return; }
+      }
+      svgCleanAttrs(n);
+      svgWalk(n);
+    });
+  }
+
+  function svgMeasure(root) {
+    var vbAttr = (root.getAttribute('viewBox') || '').trim();
+    var vw = 0, vh = 0;
+    if (vbAttr) {
+      var p = vbAttr.split(/[\s,]+/).map(parseFloat);
+      if (p.length === 4 && p[2] > 0 && p[3] > 0) { vw = p[2]; vh = p[3]; }
+    }
+    var rawW = root.getAttribute('width') || '';
+    var rawH = root.getAttribute('height') || '';
+    var w = rawW.indexOf('%') === -1 ? parseFloat(rawW) : 0;
+    var h = rawH.indexOf('%') === -1 ? parseFloat(rawH) : 0;
+    if (!(w > 0)) w = vw;
+    if (!(h > 0)) h = vh;
+    if (!(w > 0) && !(h > 0)) { w = 300; h = 150; }
+    else if (!(w > 0)) w = h;
+    else if (!(h > 0)) h = w;
+    return { w: w, h: h };
+  }
+
+  function svgParse(text) {
+    var src = String(text || '').trim();
+    if (!src) throw new Error('کد SVG خالی است.');
+    var start = src.search(/<svg[\s>]/i);
+    if (start < 0) throw new Error('تگ <svg> در کد پیدا نشد.');
+    var end = src.lastIndexOf('</svg>');
+    src = end > start ? src.slice(start, end + 6) : src.slice(start);
+
+    var doc = new DOMParser().parseFromString(src, 'image/svg+xml');
+    if (doc.getElementsByTagName('parsererror').length) {
+      throw new Error('کد SVG معتبر نیست — ساختار XML خراب است.');
+    }
+    var root = doc.documentElement;
+    if (!root || root.nodeName.toLowerCase() !== 'svg') {
+      throw new Error('ریشه‌ی سند باید تگ <svg> باشد.');
+    }
+    svgCleanAttrs(root);
+    svgWalk(root);
+    root.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+
+    var m = svgMeasure(root);
+    return { root: root, w: m.w, h: m.h };
+  }
+
+  function svgOut() {
+    var bw = svgState.bw, bh = svgState.bh;
+    if (!(bw > 0) || !(bh > 0)) return null;
+    var custom = parseInt(el.svgWidth.value, 10);
+    var scale = parseInt(el.svgScale.value, 10) || 1;
+    var w = custom > 0 ? custom : Math.round(bw * scale);
+    w = Math.max(1, Math.min(12000, w));
+    var h = Math.max(1, Math.round(w * bh / bw));
+    // سقف ایمن برای حافظه‌ی canvas (حدود ۲۴ مگاپیکسل)
+    var area = w * h;
+    if (area > 24000000) {
+      var k = Math.sqrt(24000000 / area);
+      w = Math.max(1, Math.floor(w * k));
+      h = Math.max(1, Math.floor(h * k));
+    }
+    return { w: w, h: h };
+  }
+
+  function svgMeta() {
+    var o = svgOut();
+    if (!o || !svgState.clean) { el.svgMeta.textContent = ''; return; }
+    var size = 0;
+    try { size = new Blob([svgState.clean]).size; } catch (e) { /* ignore */ }
+    el.svgMeta.textContent = faNum(o.w) + ' × ' + faNum(o.h) + ' px · ' + bytes(size);
+  }
+
+  function svgFail(msg) {
+    if (svgState.url) { URL.revokeObjectURL(svgState.url); svgState.url = null; }
+    svgState.root = null; svgState.clean = ''; svgState.img = null;
+    svgState.bw = 0; svgState.bh = 0;
+    el.svgStage.classList.add('is-error');
+    el.svgStage.innerHTML = '<p class="svg-empty">' + esc(msg) + '</p>';
+    el.svgMeta.textContent = '';
+    el.svgPng.disabled = true;
+    el.svgSave.disabled = true;
+    el.svgCopy.disabled = true;
+  }
+
+  function svgReset() {
+    if (svgState.url) { URL.revokeObjectURL(svgState.url); svgState.url = null; }
+    svgState.root = null; svgState.clean = ''; svgState.img = null;
+    svgState.bw = 0; svgState.bh = 0;
+    el.svgStage.classList.remove('is-error');
+    el.svgStage.innerHTML = '<p class="svg-empty">هنوز کدی وارد نشده است</p>';
+    el.svgMeta.textContent = '';
+    el.svgPng.disabled = true;
+    el.svgSave.disabled = true;
+    el.svgCopy.disabled = true;
+  }
+
+  function svgRender() {
+    var code = el.svgCode.value;
+    if (!code.trim()) { svgReset(); return; }
+
+    var parsed;
+    try {
+      parsed = svgParse(code);
+    } catch (e) {
+      svgFail(e.message || 'کد SVG قابل خواندن نیست.');
+      return;
+    }
+
+    parsed.root.setAttribute('width', Math.round(parsed.w));
+    parsed.root.setAttribute('height', Math.round(parsed.h));
+
+    var ser;
+    try {
+      ser = new XMLSerializer().serializeToString(parsed.root);
+    } catch (e) {
+      svgFail('سریال‌سازی SVG ناموفق بود.');
+      return;
+    }
+
+    var blob = new Blob([ser], { type: 'image/svg+xml;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var img = new Image();
+
+    img.onload = function () {
+      if (svgState.url) URL.revokeObjectURL(svgState.url);
+      svgState.url = url;
+      svgState.img = img;
+      svgState.root = parsed.root;
+      svgState.clean = ser;
+      svgState.bw = parsed.w;
+      svgState.bh = parsed.h;
+
+      el.svgStage.classList.remove('is-error');
+      el.svgStage.innerHTML = '';
+      var preview = document.createElement('img');
+      preview.src = url;
+      preview.alt = 'پیش‌نمایش SVG';
+      el.svgStage.appendChild(preview);
+
+      el.svgPng.disabled = false;
+      el.svgSave.disabled = false;
+      el.svgCopy.disabled = false;
+      svgMeta();
+    };
+
+    img.onerror = function () {
+      URL.revokeObjectURL(url);
+      svgFail('این کد در مرورگر رندر نشد — ساختار SVG را بررسی کنید.');
+    };
+
+    img.src = url;
+  }
+
+  function svgSafeName() {
+    var n = (el.svgName.value || '').trim().replace(/\.(svg|png)$/i, '').replace(/[\\/:*?"<>|]/g, '_');
+    return n || 'icon';
+  }
+
+  function svgDownload(blob, name) {
+    var u = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = u;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(u); }, 5000);
+  }
+
+  function svgPngBlob(cb) {
+    var o = svgOut();
+    if (!o || !svgState.img) return;
+    var c = document.createElement('canvas');
+    c.width = o.w;
+    c.height = o.h;
+    var ctx = c.getContext('2d');
+    if (svgState.bg !== 'transparent') {
+      ctx.fillStyle = svgState.bg;
+      ctx.fillRect(0, 0, o.w, o.h);
+    }
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(svgState.img, 0, 0, o.w, o.h);
+    c.toBlob(function (b) { cb(b, o); }, 'image/png');
+  }
+
+  function svgLoadFile(file) {
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) { showErr('فایل SVG بزرگ‌تر از ۴ مگابایت است.'); return; }
+    var fr = new FileReader();
+    fr.onload = function () {
+      el.svgCode.value = String(fr.result || '');
+      el.svgName.value = (file.name || 'icon').replace(/\.svg$/i, '') || 'icon';
+      selectTab('svg');
+      svgRender();
+      toast('فایل SVG بارگذاری شد');
+    };
+    fr.onerror = function () { showErr('خواندن فایل SVG ناموفق بود.'); };
+    fr.readAsText(file);
+  }
+
+  /* SVG background swatches */
+  SVG_BG.forEach(function (c) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'swatch';
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', c.v === svgState.bg ? 'true' : 'false');
+    b.setAttribute('aria-label', 'پس‌زمینه ' + c.n);
+    b.title = c.n;
+    if (c.v === 'transparent') {
+      b.classList.add('swatch-clear');
+      b.style.background = 'repeating-conic-gradient(#c9c9d6 0% 25%, #ffffff 0% 50%) 50% / 12px 12px';
+    } else {
+      b.style.background = c.v;
+    }
+    b.addEventListener('click', function () {
+      svgState.bg = c.v;
+      $$('#svgBg .swatch').forEach(function (x) { x.setAttribute('aria-checked', 'false'); });
+      b.setAttribute('aria-checked', 'true');
+    });
+    el.svgBg.appendChild(b);
+  });
+
+  /* SVG inputs */
+  el.svgCode.addEventListener('input', function () {
+    clearTimeout(svgState.timer);
+    svgState.timer = setTimeout(svgRender, 420);
+  });
+  el.svgScale.addEventListener('change', svgMeta);
+  el.svgWidth.addEventListener('input', svgMeta);
+
+  el.svgPick.addEventListener('click', function () { el.svgFile.click(); });
+  el.svgFile.addEventListener('change', function () {
+    svgLoadFile(el.svgFile.files && el.svgFile.files[0]);
+    el.svgFile.value = '';
+  });
+  el.svgSample.addEventListener('click', function () {
+    el.svgCode.value = SAMPLE_SVG;
+    el.svgName.value = 'gradient-badge';
+    svgRender();
+    toast('نمونه بارگذاری شد');
+  });
+  el.svgWipe.addEventListener('click', function () {
+    el.svgCode.value = '';
+    svgReset();
+    el.svgCode.focus();
+  });
+
+  [el.svgCode, el.svgStage].forEach(function (node) {
+    node.addEventListener('dragover', function (e) { e.preventDefault(); });
+    node.addEventListener('drop', function (e) {
+      e.preventDefault();
+      var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) svgLoadFile(f);
+    });
+  });
+
+  el.svgPng.addEventListener('click', function () {
+    if (!svgState.img) return;
+    svgPngBlob(function (b, o) {
+      if (!b) { showErr('ساخت PNG ناموفق بود.'); return; }
+      svgDownload(b, svgSafeName() + '.png');
+      toast('PNG آماده شد — ' + faNum(o.w) + '×' + faNum(o.h));
+    });
+  });
+
+  el.svgSave.addEventListener('click', function () {
+    if (!svgState.root) return;
+    var o = svgOut();
+    if (!o) return;
+    var clone = svgState.root.cloneNode(true);
+    clone.setAttribute('width', o.w);
+    clone.setAttribute('height', o.h);
+    var text = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      new XMLSerializer().serializeToString(clone);
+    svgDownload(new Blob([text], { type: 'image/svg+xml;charset=utf-8' }), svgSafeName() + '.svg');
+    toast('SVG آماده شد — ' + faNum(o.w) + '×' + faNum(o.h));
+  });
+
+  el.svgCopy.addEventListener('click', function () {
+    if (!svgState.clean) return;
+    var text = svgState.clean;
+
+    function legacy() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '-1000px';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      return ok;
+    }
+
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      toast(legacy() ? 'کد SVG کپی شد' : 'کپی در این مرورگر پشتیبانی نمی‌شود');
+      return;
+    }
+    navigator.clipboard.writeText(text)
+      .then(function () { toast('کد SVG کپی شد'); })
+      .catch(function () {
+        toast(legacy() ? 'کد SVG کپی شد' : 'کپی ناموفق بود');
+      });
+  });
 
   /* --------------------------------- ZIP ---------------------------------- */
   var CRC_TABLE = (function () {

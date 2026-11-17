@@ -1,5 +1,5 @@
 /* PixelKit — service worker (offline shell) */
-const CACHE = 'pixelkit-v1';
+const CACHE = 'pixelkit-v2';
 const ASSETS = [
   './',
   './index.html',

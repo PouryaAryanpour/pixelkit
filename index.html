@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>PixelKit — تبدیل HEIC و فشرده‌سازی تصویر، کاملاً در مرورگر</title>
-<meta name="description" content="تبدیل HEIC به JPG/PNG/WebP، فشرده‌سازی، تغییر اندازه، چرخش، فیلتر و واترمارک — همه در مرورگر. بدون آپلود، بدون سرور، بدون حساب کاربری.">
-<meta name="keywords" content="تبدیل heic, heic به jpg, فشرده سازی تصویر, کم حجم کردن عکس, تبدیل عکس آنلاین, واترمارک عکس, تغییر اندازه عکس, image compressor, heic converter, webp converter">
+<title>PixelKit — تبدیل HEIC، SVG به PNG و فشرده‌سازی تصویر در مرورگر</title>
+<meta name="description" content="تبدیل HEIC به JPG/PNG/WebP، تبدیل کد SVG به PNG و SVG، فشرده‌سازی، تغییر اندازه، چرخش، فیلتر و واترمارک — همه در مرورگر. بدون آپلود، بدون سرور، بدون حساب کاربری.">
+<meta name="keywords" content="تبدیل heic, heic به jpg, svg به png, تبدیل svg, کد svg, فشرده سازی تصویر, کم حجم کردن عکس, تبدیل عکس آنلاین, واترمارک عکس, تغییر اندازه عکس, image compressor, heic converter, svg converter, webp converter">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <meta name="author" content="PixelKit">
 <meta name="theme-color" content="#0A0A12" media="(prefers-color-scheme: dark)">
@@ -15,11 +15,11 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="PixelKit">
 <meta property="og:locale" content="fa_IR">
-<meta property="og:title" content="PixelKit — تبدیل HEIC و فشرده‌سازی تصویر در مرورگر">
-<meta property="og:description" content="همه‌چیز سمت مرورگر: تبدیل، فشرده‌سازی، تغییر اندازه، چرخش، فیلتر و واترمارک. بدون آپلود.">
+<meta property="og:title" content="PixelKit — تبدیل HEIC، SVG به PNG و فشرده‌سازی تصویر در مرورگر">
+<meta property="og:description" content="همه‌چیز سمت مرورگر: تبدیل HEIC و SVG، فشرده‌سازی، تغییر اندازه، فیلتر و واترمارک. بدون آپلود.">
 <meta property="og:url" content="https://pouryaaryanpour.github.io/pixelkit/">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PixelKit — تبدیل HEIC و فشرده‌سازی تصویر در مرورگر">
+<meta name="twitter:title" content="PixelKit — تبدیل HEIC، SVG به PNG و فشرده‌سازی تصویر">
 <meta name="twitter:description" content="همه‌چیز سمت مرورگر. بدون آپلود، بدون سرور، بدون حساب کاربری.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D28D9'/%3E%3Cstop offset='.5' stop-color='%23A855F7'/%3E%3Cstop offset='1' stop-color='%23EC4899'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='26' fill='url(%23g)'/%3E%3Cpath d='M26 70l16-17 11 11 9-8 15 14' stroke='%23fff' stroke-width='7' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='37' cy='37' r='8.5' fill='%23FDE68A'/%3E%3C/svg%3E">
@@ -38,11 +38,12 @@
   "operatingSystem": "Any",
   "browserRequirements": "Requires JavaScript",
   "inLanguage": "fa-IR",
-  "description": "تبدیل HEIC/HEIF و فشرده‌سازی تصاویر با پردازش کاملاً سمت مرورگر؛ شامل تغییر اندازه، چرخش، فیلتر و واترمارک.",
+  "description": "تبدیل HEIC/HEIF و SVG، فشرده‌سازی تصاویر با پردازش کاملاً سمت مرورگر؛ شامل تغییر اندازه، چرخش، فیلتر و واترمارک.",
   "softwareVersion": "1.0.0",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "featureList": [
     "تبدیل HEIC/HEIF به JPG، PNG و WebP",
+    "تبدیل کد SVG به PNG با مقیاس دلخواه و خروجی SVG پاک‌سازی‌شده",
     "فشرده‌سازی JPG، PNG، WebP، AVIF و GIF",
     "تغییر اندازه با پیش‌تنظیم شبکه‌های اجتماعی",
     "چرخش، برگرداندن، برش مرکزی و تغییر نسبت",
@@ -64,6 +65,8 @@
       "acceptedAnswer": { "@type": "Answer", "text": "نه. تمام پردازش — رمزگشایی HEIC، تغییر اندازه، فیلتر، واترمارک و کدگذاری — داخل مرورگر شما انجام می‌شود. هیچ درخواست خروجی وجود ندارد و حتی فونت و اسکریپت هم از CDN بارگذاری نمی‌شوند." } },
     { "@type": "Question", "name": "HEIC را چگونه به JPG تبدیل کنم؟",
       "acceptedAnswer": { "@type": "Answer", "text": "فایل‌های heic یا heif را در کادر ابزار رها کنید، فرمت خروجی را روی JPG بگذارید و دکمه پردازش را بزنید. نتیجه را می‌توانید جداگانه یا به‌صورت ZIP دانلود کنید." } },
+    { "@type": "Question", "name": "چگونه کد SVG را به PNG تبدیل کنم؟",
+      "acceptedAnswer": { "@type": "Answer", "text": "تب «SVG» را باز کنید و کد را در کادر پیست کنید یا فایل .svg را رها کنید. پیش‌نمایش بلافاصله نمایش داده می‌شود؛ سپس مقیاس، عرض دقیق و پس‌زمینه را انتخاب کنید و «دانلود PNG» یا «دانلود SVG» را بزنید." } },
     { "@type": "Question", "name": "چقدر می‌توان حجم عکس را کم کرد؟",
       "acceptedAnswer": { "@type": "Answer", "text": "روی عکس‌های معمولی آیفون، تبدیل به JPG با کیفیت ۷۵ تا ۸۰ به‌همراه محدود کردن حداکثر عرض، حجم فایل را بین ۶۰ تا ۹۰ درصد کاهش می‌دهد بدون تفاوت محسوس. خروجی WebP معمولاً از هر دو فرمت دیگر کوچک‌تر است." } },
     { "@type": "Question", "name": "آیا اطلاعات مکان‌نمایی عکس حذف می‌شود؟",
@@ -119,6 +122,8 @@
   <symbol id="i-mobile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18.5h2"/></g></symbol>
   <symbol id="i-monitor" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2.5"/><path d="M8 21h8"/><path d="M12 17v4"/></g></symbol>
   <symbol id="i-bolt-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/><path d="m2 2 20 20"/></g></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m8 6-5 6 5 6"/><path d="m16 6 5 6-5 6"/><path d="m13.5 4-3 16"/></g></symbol>
+  <symbol id="i-file-svg" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z"/><path d="M14 3v5h5"/><path d="m9 17 3-5 3 5"/></g></symbol>
 </svg>
 
 <!-- ======================= پس‌زمینه گرادیانی ======================= -->
@@ -189,7 +194,7 @@
     <p class="eyebrow"><svg width="15" height="15" aria-hidden="true"><use href="#i-bolt-off"/></svg> ۱۰۰٪ داخل مرورگر — بدون یک بایت آپلود</p>
     <h1>تصویرت را <span class="grad-text">حرفه‌ای</span> کن.<br>همین حالا، همین‌جا.</h1>
     <p class="lead">
-      تبدیل <b>HEIC</b> به JPG، فشرده‌سازی تا <b>۹۰٪</b>، تغییر اندازه، چرخش، فیلتر رنگ و واترمارک —
+      تبدیل <b>HEIC</b> و کد <b>SVG</b>، فشرده‌سازی تا <b>۹۰٪</b>، تغییر اندازه، چرخش، فیلتر رنگ و واترمارک —
       همه در مرورگر شما، بدون سرور، بدون حساب کاربری، بدون واترمارک.
     </p>
     <div class="hero-cta">
@@ -231,6 +236,9 @@
         <button class="tab" role="tab" id="tab-mark" aria-selected="false" aria-controls="panel-mark" data-tab="mark" tabindex="-1">
           <svg width="17" height="17" aria-hidden="true"><use href="#i-stamp"/></svg><span>واترمارک</span>
         </button>
+        <button class="tab" role="tab" id="tab-svg" aria-selected="false" aria-controls="panel-svg" data-tab="svg" tabindex="-1">
+          <svg width="17" height="17" aria-hidden="true"><use href="#i-code"/></svg><span>SVG</span>
+        </button>
       </div>
 
       <!-- ناحیه رها کردن -->
@@ -250,8 +258,8 @@
           </svg>
         </div>
         <h2>فایل‌ها را اینجا رها کنید</h2>
-        <p>HEIC · HEIF · JPG · PNG · WebP · AVIF · GIF — تا <b>۵۰ فایل</b> هم‌زمان</p>
-        <span class="drop-hint">کلیک کنید یا <kbd>Ctrl</kbd>+<kbd>V</kbd> را بزنید</span>
+        <p>HEIC · JPG · PNG · WebP · AVIF · GIF · SVG — تا <b>۵۰ فایل</b> هم‌زمان</p>
+        <span class="drop-hint">کلیک کنید یا <kbd>Ctrl</kbd>+<kbd>V</kbd> را بزنید · فایل SVG به تب کد منتقل می‌شود</span>
         <input type="file" id="file" accept="image/*,.heic,.heif,.hif" multiple>
       </div>
 
@@ -424,10 +432,86 @@
             </div>
           </div>
         </div>
+        <!-- SVG -->
+        <div class="panel" id="panel-svg" role="tabpanel" aria-labelledby="tab-svg" data-panel="svg" hidden>
+          <div class="svg-grid">
+            <div class="field">
+              <label for="svgCode">کد SVG</label>
+              <textarea id="svgCode" dir="ltr" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off"
+                placeholder="&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 240 160&quot;&gt;&#10;  &lt;defs&gt;&#10;    &lt;linearGradient id=&quot;g&quot;&gt;…&lt;/linearGradient&gt;&#10;  &lt;/defs&gt;&#10;  &lt;rect width=&quot;240&quot; height=&quot;160&quot; rx=&quot;24&quot; fill=&quot;url(#g)&quot; /&gt;&#10;&lt;/svg&gt;"></textarea>
+              <div class="svg-tools">
+                <button class="mini-btn" type="button" id="svgPick">
+                  <svg width="15" height="15" aria-hidden="true"><use href="#i-upload"/></svg>بارگذاری فایل
+                </button>
+                <button class="mini-btn" type="button" id="svgSample">
+                  <svg width="15" height="15" aria-hidden="true"><use href="#i-sparkle"/></svg>نمونه
+                </button>
+                <button class="mini-btn" type="button" id="svgWipe">
+                  <svg width="15" height="15" aria-hidden="true"><use href="#i-trash"/></svg>پاک کردن
+                </button>
+                <input type="file" id="svgFile" accept=".svg,image/svg+xml" hidden>
+              </div>
+              <p class="hint" id="svgHint">کد را پیست کنید، فایل <code>.svg</code> را رها کنید، یا با <kbd>Ctrl</kbd>+<kbd>V</kbd> بچسبانید.</p>
+            </div>
+
+            <div class="field">
+              <label>پیش‌نمایش <span class="unit" id="svgMeta" aria-live="polite"></span></label>
+              <div class="svg-stage" id="svgStage">
+                <p class="svg-empty">هنوز کدی وارد نشده است</p>
+              </div>
+              <p class="hint" id="svgNote">پیش‌نمایش روی شطرنجی شفافیت نمایش داده می‌شود. کد پاک‌سازی می‌شود: اسکریپت، رویداد و ارجاع خارجی حذف می‌شوند.</p>
+            </div>
+          </div>
+
+          <div class="grid-3 mt">
+            <div class="field">
+              <label for="svgScale">مقیاس خروجی</label>
+              <select id="svgScale">
+                <option value="1">۱× — اندازه اصلی</option>
+                <option value="2" selected>۲× — رتینا</option>
+                <option value="3">۳×</option>
+                <option value="4">۴×</option>
+              </select>
+              <p class="hint">مقیاس روی ابعاد پایه‌ی SVG اعمال می‌شود.</p>
+            </div>
+            <div class="field">
+              <label for="svgWidth">عرض دقیق <span class="unit">px</span></label>
+              <input type="number" id="svgWidth" min="8" max="12000" step="1" placeholder="خودکار" inputmode="numeric">
+              <p class="hint">خالی بگذارید تا از ابعاد اصلی × مقیاس استفاده شود.</p>
+            </div>
+            <div class="field">
+              <label>پس‌زمینه PNG</label>
+              <div class="swatch-row" id="svgBg" role="radiogroup" aria-label="رنگ پس‌زمینه خروجی PNG"></div>
+              <p class="hint">برای PNG بدون پس‌زمینه، «شفاف» را انتخاب کنید.</p>
+            </div>
+          </div>
+
+          <div class="grid-2 mt">
+            <div class="field">
+              <label for="svgName">نام فایل خروجی</label>
+              <input type="text" id="svgName" value="icon" maxlength="80" autocomplete="off" spellcheck="false">
+              <p class="hint">پسوند بر اساس فرمت انتخابی اضافه می‌شود.</p>
+            </div>
+            <div class="field">
+              <label>خروجی</label>
+              <div class="svg-actions">
+                <button class="btn btn-primary" id="svgPng" type="button" disabled>
+                  <svg width="17" height="17" aria-hidden="true"><use href="#i-download"/></svg>دانلود PNG
+                </button>
+                <button class="btn btn-accent" id="svgSave" type="button" disabled>
+                  <svg width="17" height="17" aria-hidden="true"><use href="#i-file-svg"/></svg>دانلود SVG
+                </button>
+                <button class="btn btn-ghost" id="svgCopy" type="button" disabled>
+                  <svg width="17" height="17" aria-hidden="true"><use href="#i-copy"/></svg>کپی کد
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- نوار عملیات -->
-      <div class="actionbar">
+      <div class="actionbar" id="actionbar">
         <div class="actionbar-left">
           <button class="btn btn-primary" id="convert" disabled>
             <svg width="18" height="18" aria-hidden="true"><use href="#i-sparkle"/></svg>
@@ -515,6 +599,12 @@
       <details>
         <summary>HEIC را چگونه به JPG تبدیل کنم؟</summary>
         <p>فایل‌های <code>.heic</code> یا <code>.heif</code> را در کادر ابزار رها کنید، در تب «تبدیل» فرمت خروجی را روی JPG بگذارید، کیفیت را تنظیم کنید و «پردازش» را بزنید.</p>
+      </details>
+      <details>
+        <summary>کد SVG را چگونه به PNG تبدیل کنم؟</summary>
+        <p>تب <b>«SVG»</b> را باز کنید، کد <code>&lt;svg&gt;</code> را در کادر پیست کنید یا فایل <code>.svg</code> را روی همان کادر رها کنید. پیش‌نمایش بلافاصله ساخته می‌شود. سپس مقیاس (۱× تا ۴×)، عرض دقیق و پس‌زمینه PNG را انتخاب کنید و یکی از دو خروجی را بگیرید:</p>
+        <p>• <b>دانلود PNG</b> — تصویر بیت‌مپ با ابعاد دلخواه و پس‌زمینه شفاف، سفید، مشکی یا هر رنگ دیگر.<br>• <b>دانلود SVG</b> — همان فایل، پاک‌سازی‌شده از اسکریپت و ارجاع خارجی، با ابعاد خروجی روی <code>width</code> و <code>height</code> و حفظ <code>viewBox</code>.</p>
+        <p>اگر SVG شما از <code>&lt;image href="https://…"&gt;</code> یا <code>&lt;use href="https://…"&gt;</code> استفاده می‌کند، آن ارجاع حذف می‌شود؛ تصاویر باید به‌صورت <code>data:</code> داخل فایل جاسازی شده باشند. متن نیز با فونت‌های سیستمی رندر می‌شود، چون فونت وب داخل تصویر SVG بارگذاری نمی‌شود.</p>
       </details>
       <details>
         <summary>چقدر می‌توانم حجم عکس‌ها را کم کنم؟</summary>
